@@ -13,6 +13,9 @@ public final class MyUtil {
 
     }
 
+    /**
+     * 把八大基本类型的包装器类型转成基本类型 若为null 则返回对应基本类型的默认值
+     */
     public static byte byteValue(Byte b) {
         return b == null ? 0 : b;
     }
@@ -45,14 +48,33 @@ public final class MyUtil {
         return c == null ? '\u0000' : c;
     }
 
+    /**
+     * 检测字符串是否是纯数字
+     *
+     * @param s 目标字符串
+     * @return true 是  false 不是
+     */
     public static boolean isNumeric(String s) {
         return Const.PATTERN_NUM.matcher(s).matches();
     }
 
+    /**
+     * 检测字符串是否是ipv4格式
+     *
+     * @param s 目标字符串
+     * @return true 是  false 不是
+     */
     public static boolean isIPv4(String s) {
         return Const.PATTERN_IPV4.matcher(s).matches();
     }
 
+    /**
+     * 字符串左补零
+     *
+     * @param s   目标字符串
+     * @param len 需要补到多长 若字符串长度大于或等于这个值 则不补零
+     * @return 补零后的字符串
+     */
     public static String addZero(String s, int len) {
         int length = s.length();
         int num = len - length;
@@ -66,6 +88,9 @@ public final class MyUtil {
         return builder.toString();
     }
 
+    /**
+     * 格式化double 控制小数的精度
+     */
     private static DecimalFormat df1 = new DecimalFormat("#.0");
     private static DecimalFormat df2 = new DecimalFormat("#.00");
     private static DecimalFormat df3 = new DecimalFormat("#.000");
@@ -103,6 +128,12 @@ public final class MyUtil {
         return format.charAt(0) == '.' ? ('0' + format) : format;
     }
 
+    /**
+     * 把方向数字转成文字 0-360    超出范围的视为正北
+     *
+     * @param drct 方向 0-360
+     * @return 方向的名称
+     */
     public static String drctToString(int drct) {
         if (drct >= 23 && drct < 68) {
             return "东北";

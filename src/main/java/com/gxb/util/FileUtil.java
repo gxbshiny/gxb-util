@@ -138,9 +138,9 @@ public final class FileUtil {
     /**
      * 把文件读取到map
      *
-     * @param file
-     * @param map
-     * @param split
+     * @param file  目标文件
+     * @param map   用于保存的map
+     * @param split 字段的分隔符   key=value --> map.put(key,value);
      * @throws IOException
      */
     public static void fileToMap(File file, Map<String, String> map, String split) throws IOException {
@@ -164,10 +164,10 @@ public final class FileUtil {
     /**
      * 通过url把文件下载到内存
      *
-     * @param client
-     * @param url
-     * @param len
-     * @return
+     * @param client 用于http请求的http客户端
+     * @param url    文件的url地址
+     * @param len    byte[]的最大长度
+     * @return byte[]类型的list
      * @throws IOException
      */
     public static List<byte[]> downFile(HttpClient client, String url, int len) throws IOException {
@@ -196,16 +196,24 @@ public final class FileUtil {
         return list;
     }
 
-    public static List<byte[]> readFile(File file) throws IOException {
+    /**
+     * 读取文件到内存中
+     *
+     * @param file 目标文件
+     * @param l    byte[]的最大长度
+     * @return byte[]类型的list List<byte[]>
+     * @throws IOException
+     */
+    public static List<byte[]> readFile(File file, int l) throws IOException {
         List<byte[]> result = new ArrayList<>();
         BufferedInputStream bis = null;
         try {
             bis = new BufferedInputStream(new FileInputStream(file));
-            byte[] temp = new byte[10240];
+            byte[] temp = new byte[l];
             int len;
             while ((len = bis.read(temp)) > 0) {
                 result.add(Arrays.copyOfRange(temp, 0, len));
-                temp = new byte[10240];
+                temp = new byte[l];
             }
         } finally {
             if (bis != null) {
@@ -215,6 +223,13 @@ public final class FileUtil {
         return result;
     }
 
+    /**
+     * 把字节码保存到文件
+     *
+     * @param list     byte[]类型的list
+     * @param fileName 文件名
+     * @throws IOException
+     */
     public static void bytesToFile(List<byte[]> list, String fileName) throws IOException {
         BufferedOutputStream bos = null;
         try {

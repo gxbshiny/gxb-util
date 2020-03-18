@@ -15,7 +15,14 @@ public final class TcpUtil {
 
     }
 
-    // 发送数据
+    /**
+     * 用tcp协议向目标主机端口发送数据 采用短连接 每发送一次数据建立断开一次连接
+     *
+     * @param host  目标主机
+     * @param port  目标主机的tcp端口
+     * @param bytes 需要发送的数据
+     * @throws IOException
+     */
     public static void send(String host, int port, byte[] bytes) throws IOException {
         Socket socket = null;
         BufferedOutputStream bos = null;

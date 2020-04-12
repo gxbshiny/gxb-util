@@ -1,5 +1,9 @@
 package com.gxb.util;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 import java.text.DecimalFormat;
 
 /**
@@ -15,37 +19,70 @@ public final class MyUtil {
 
     /**
      * 把八大基本类型的包装器类型转成基本类型 若为null 则返回对应基本类型的默认值
+     * sub 替补值  如果包装器类型为null  则使用sub替代
      */
     public static byte byteValue(Byte b) {
-        return b == null ? 0 : b;
+        return b != null ? b : 0;
+    }
+
+    public static byte byteValue(Byte b, byte sub) {
+        return b != null ? b : sub;
     }
 
     public static short shortValue(Short s) {
-        return s == null ? 0 : s;
+        return s != null ? s : 0;
+    }
+
+    public static short shortValue(Short s, short sub) {
+        return s != null ? s : sub;
     }
 
     public static int intValue(Integer i) {
-        return i == null ? 0 : i;
+        return i != null ? i : 0;
+    }
+
+    public static int intValue(Integer i, int sub) {
+        return i != null ? i : sub;
     }
 
     public static long longValue(Long l) {
-        return l == null ? 0 : l;
+        return l != null ? l : 0;
+    }
+
+    public static long longValue(Long l, long sub) {
+        return l != null ? l : sub;
     }
 
     public static boolean booleanValue(Boolean b) {
         return b != null && b;
     }
 
+    public static boolean booleanValue(Boolean b, boolean sub) {
+        return b != null ? b : sub;
+    }
+
     public static float floatValue(Float f) {
-        return f == null ? 0 : f;
+        return f != null ? f : 0;
+    }
+
+    public static float floatValue(Float f, float sub) {
+        return f != null ? f : sub;
     }
 
     public static double doubleValue(Double d) {
-        return d == null ? 0 : d;
+        return d != null ? d : 0;
+    }
+
+    public static double doubleValue(Double d, double sub) {
+        return d != null ? d : sub;
     }
 
     public static char charValue(Character c) {
-        return c == null ? '\u0000' : c;
+        return c != null ? c : '\u0000';
+    }
+
+    public static char charValue(Character c, char sub) {
+        return c != null ? c : sub;
     }
 
     /**
@@ -79,9 +116,9 @@ public final class MyUtil {
         int length = s.length();
         int num = len - length;
         if (num <= 0) return s;
-        StringBuilder builder = new StringBuilder(Math.max(length, len));
+        StringBuilder builder = new StringBuilder(len);
         while (num > 0) {
-            builder.append('0');
+            builder.append("0");
             num--;
         }
         builder.append(s);
@@ -157,6 +194,32 @@ public final class MyUtil {
             return "西北";
         }
         return "正北";
+    }
+
+    public static String jsonToXml(String json) {
+        StringBuilder builder = new StringBuilder();
+        Object jo = JSON.parse(json);
+        if (jo instanceof JSONObject) {
+            ((JSONObject) jo).forEach((key, val) -> {
+                if (val instanceof JSONObject || val instanceof JSONArray) {
+                    builder.append("<").append(key).append(">\n");
+                    builder.append(jsonToXml(((JSON) val).toJSONString()));
+                } else {
+                    builder.append("<").append(key).append(">");
+                    builder.append(val);
+                }
+                builder.append("</").append(key).append(">\n");
+            });
+        } else if (jo instanceof JSONArray) {
+            ((JSONArray) jo).forEach(obj -> {
+                if (obj instanceof JSONObject || obj instanceof JSONArray) {
+                    builder.append("<a>\n").append(jsonToXml(((JSON) obj).toJSONString())).append("</a>\n");
+                } else {
+                    builder.append("<a>").append(obj).append("</a>\n");
+                }
+            });
+        }
+        return builder.toString();
     }
 
 }

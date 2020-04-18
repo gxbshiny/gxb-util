@@ -3,7 +3,6 @@ package com.gxb.util;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import sun.rmi.runtime.Log;
 
 import java.io.*;
 import java.util.*;
@@ -43,15 +42,11 @@ public final class FileUtil {
      * @param fileName 文件名
      * @return
      */
-    public static File getFile(String path, String fileName) throws IOException {
+    public static File creatFile(String path, String fileName) throws IOException {
         File folder = new File(path);
-        if (!folder.exists()) {
-            folder.mkdirs();
-        }
+        if (!folder.exists()) folder.mkdirs();
         File file = new File(folder, fileName);
-        if (!file.exists()) {
-            file.createNewFile();
-        }
+        if (!file.exists()) file.createNewFile();
         return file;
     }
 
@@ -61,11 +56,9 @@ public final class FileUtil {
      * @param fileName 文件名
      * @return
      */
-    public static File getFile(String fileName) throws IOException {
+    public static File creatFile(String fileName) throws IOException {
         File file = new File(fileName);
-        if (!file.exists()) {
-            file.createNewFile();
-        }
+        if (!file.exists()) file.createNewFile();
         return file;
     }
 
@@ -242,6 +235,27 @@ public final class FileUtil {
                 bos.close();
             }
         }
+    }
+
+    /**
+     * 检查两个文件夹下是否有同名文件
+     *
+     * @param path1 文件夹1的路径
+     * @param path2 文件夹2的路径
+     * @return 同名文件的数组
+     */
+    public static String[] checkSameName(String path1, String path2) {
+        File[] files1 = getFileList(path1);
+        File[] files2 = getFileList(path2);
+        List<String> result = new ArrayList<>(Math.min(files1.length, files2.length));
+        Set<String> names1 = new HashSet<>(files1.length);
+        for (File file : files1) names1.add(file.getName());
+        for (File file : files2) {
+            if (names1.contains(file.getName())) result.add(file.getName());
+        }
+        String[] arr = new String[result.size()];
+        for (int i = 0; i < result.size(); i++) arr[i] = result.get(i);
+        return arr;
     }
 
 }

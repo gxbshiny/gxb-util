@@ -128,12 +128,12 @@ public final class MyUtil {
     /**
      * 格式化double 控制小数的精度
      */
-    private static DecimalFormat df1 = new DecimalFormat("#.0");
-    private static DecimalFormat df2 = new DecimalFormat("#.00");
-    private static DecimalFormat df3 = new DecimalFormat("#.000");
-    private static DecimalFormat df4 = new DecimalFormat("#.0000");
-    private static DecimalFormat df5 = new DecimalFormat("#.00000");
-    private static DecimalFormat df6 = new DecimalFormat("#.000000");
+    private static final DecimalFormat df1 = new DecimalFormat("#.0");
+    private static final DecimalFormat df2 = new DecimalFormat("#.00");
+    private static final DecimalFormat df3 = new DecimalFormat("#.000");
+    private static final DecimalFormat df4 = new DecimalFormat("#.0000");
+    private static final DecimalFormat df5 = new DecimalFormat("#.00000");
+    private static final DecimalFormat df6 = new DecimalFormat("#.000000");
 
     public static String doubleFormat1(double d) {
         String format = df1.format(d);

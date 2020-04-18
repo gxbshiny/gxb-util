@@ -28,8 +28,8 @@ public final class HttpUtil {
     private static final int CONNECT_REQUEST_TIME_OUT = 5000;
     private static final boolean CONTENT_COMPRESSION_ENABLED = true;
 
-    private static final int MAX_TOTAL = 50;
-    private static final int DEFAULT_MAX_PER_ROUTE = 20;
+    private static final int MAX_TOTAL = 100;
+    private static final int DEFAULT_MAX_PER_ROUTE = 50;
 
 
     private HttpUtil() {
@@ -104,7 +104,7 @@ public final class HttpUtil {
      *
      * @return String
      */
-    public static ResponseHandler<String> defaultResponseHandler() {
+    public static ResponseHandler<String> stringResponseHandler() {
         return response -> EntityUtils.toString(response.getEntity());
     }
 

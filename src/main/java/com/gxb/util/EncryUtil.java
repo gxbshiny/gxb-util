@@ -112,20 +112,26 @@ public final class EncryUtil {
     }
 
     public static String gzip(String content) throws IOException {
-        if (content == null || content.length() == 0) return content;
+        if (content == null || content.length() == 0) {
+            return content;
+        }
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         GZIPOutputStream gzip = null;
         try {
             gzip = new GZIPOutputStream(out);
             gzip.write(content.getBytes(StandardCharsets.UTF_8));
         } finally {
-            if (gzip != null) gzip.close();
+            if (gzip != null) {
+                gzip.close();
+            }
         }
         return encodeBase64(out.toByteArray());
     }
 
     public static String unGzip(String gzipString) throws IOException {
-        if (gzipString == null) return null;
+        if (gzipString == null) {
+            return null;
+        }
         ByteArrayOutputStream out = null;
         ByteArrayInputStream in = null;
         GZIPInputStream gis = null;
@@ -142,9 +148,15 @@ public final class EncryUtil {
             }
             docompressed = out.toString();
         } finally {
-            if (gis != null) gis.close();
-            if (in != null) in.close();
-            if (out != null) out.close();
+            if (gis != null) {
+                gis.close();
+            }
+            if (in != null) {
+                in.close();
+            }
+            if (out != null) {
+                out.close();
+            }
         }
         return docompressed;
     }
@@ -163,15 +175,17 @@ public final class EncryUtil {
         return ByteUtil.bytesToHex(encryByteSHA1(content.getBytes(charset)));
     }
 
-    public static String encode3DES(String content, String secretKey) throws Exception {
+    public static String encode3Des(String content, String secretKey) throws Exception {
         Key key = SecretKeyFactory.getInstance("desede").generateSecret(new DESedeKeySpec(secretKey.getBytes()));
         Cipher cipher = Cipher.getInstance("desede/CBC/PKCS5Padding");
         cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec("01234567".getBytes()));
         return encodeBase64(cipher.doFinal(content.getBytes(StandardCharsets.UTF_8)));
     }
 
-    public static String decode3DES(String content, String secretKey) throws Exception {
-        if (content == null || content.length() == 0) return "";
+    public static String decode3Des(String content, String secretKey) throws Exception {
+        if (content == null || content.length() == 0) {
+            return "";
+        }
         Key key = SecretKeyFactory.getInstance("desede").generateSecret(new DESedeKeySpec(secretKey.getBytes()));
         Cipher cipher = Cipher.getInstance("desede/CBC/PKCS5Padding");
         cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec("01234567".getBytes()));

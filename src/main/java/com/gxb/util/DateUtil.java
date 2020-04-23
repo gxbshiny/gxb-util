@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 /**
  * @Author: gxb
  * @Time: 2019/12/25 11:38
- * @Description:
+ * @Description: 时间工具
  */
 public final class DateUtil {
     private static final Logger log = LoggerFactory.getLogger(DateUtil.class);
@@ -30,22 +30,30 @@ public final class DateUtil {
     public static final DateTimeFormatter YMDHMSS = DateTimeFormatter.ofPattern("yyyyMMddHHmmssSSS");
     public static final DateTimeFormatter Y_M_D_H_M_S_S = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
 
-    // 当前时间 yyyy-MM-dd HH:mm:ss
+    /**
+     * @return 当前时间 yyyy-MM-dd HH:mm:ss
+     */
     public static String defaultNowString() {
         return LocalDateTime.now().format(Y_M_D_H_M_S);
     }
 
-    // 当前时间 yyyyMMddHHmmss
+    /**
+     * @return 当前时间 yyyyMMddHHmmss
+     */
     public static String defaultNowNum() {
         return LocalDateTime.now().format(YMDHMS);
     }
 
-    // 今天的开始时间 0时0分0秒
+    /**
+     * @return 今天的开始时间 0时0分0秒
+     */
     public static LocalDateTime todayStart() {
         return LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
     }
 
-    // 今天的结束时间 23时59分59秒
+    /**
+     * @return 今天的结束时间 23时59分59秒
+     */
     public static LocalDateTime todayEnd() {
         return LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
     }

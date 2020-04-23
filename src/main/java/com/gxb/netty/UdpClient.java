@@ -17,7 +17,7 @@ import java.net.InetSocketAddress;
 /**
  * @Author: gxb
  * @Date: 2019/11/18 11:50
- * @Description:
+ * @Description: UDP客户端
  */
 public class UdpClient {
     private static final Logger log = LoggerFactory.getLogger(UdpClient.class);
@@ -28,8 +28,6 @@ public class UdpClient {
     protected ChannelHandler handler;
     protected int localPort;
 
-    private NioEventLoopGroup group;
-    private Bootstrap boot;
     private Channel channel;
     private InetSocketAddress addr;
 
@@ -58,12 +56,17 @@ public class UdpClient {
         this.handler = handler;
     }
 
+    /**
+     * 启动UDP客户端
+     *
+     * @throws InterruptedException 异常
+     */
     public void start() throws InterruptedException {
         if (name == null) {
             name = "UDP-Client-" + host + ":" + port;
         }
-        group = new NioEventLoopGroup();
-        boot = new Bootstrap();
+        NioEventLoopGroup group = new NioEventLoopGroup();
+        Bootstrap boot = new Bootstrap();
         boot.group(group).channel(NioDatagramChannel.class).option(ChannelOption.SO_BROADCAST, true).option(
                 ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT).handler(handler);
         channel = boot.bind(localPort).sync().channel();

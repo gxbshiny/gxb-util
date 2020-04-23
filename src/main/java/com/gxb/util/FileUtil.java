@@ -85,7 +85,9 @@ public final class FileUtil {
             }
             bw.flush();
         } finally {
-            if (bw != null) bw.close();
+            if (bw != null) {
+                bw.close();
+            }
         }
     }
 
@@ -105,7 +107,9 @@ public final class FileUtil {
                 collection.add(temp);
             }
         } finally {
-            if (br != null) br.close();
+            if (br != null) {
+                br.close();
+            }
         }
     }
 
@@ -129,7 +133,9 @@ public final class FileUtil {
             }
             bw.flush();
         } finally {
-            if (bw != null) bw.close();
+            if (bw != null) {
+                bw.close();
+            }
         }
     }
 
@@ -155,7 +161,9 @@ public final class FileUtil {
                 map.put(kv[0], kv[1]);
             }
         } finally {
-            if (br != null) br.close();
+            if (br != null) {
+                br.close();
+            }
         }
     }
 
@@ -189,7 +197,9 @@ public final class FileUtil {
                 temp = new byte[len];
             }
         } finally {
-            if (bis != null) bis.close();
+            if (bis != null) {
+                bis.close();
+            }
         }
         return list;
     }
@@ -254,12 +264,18 @@ public final class FileUtil {
         File[] files2 = getFileList(path2);
         List<String> result = new ArrayList<>(Math.min(files1.length, files2.length));
         Set<String> names1 = new HashSet<>(files1.length);
-        for (File file : files1) names1.add(file.getName());
+        for (File file : files1) {
+            names1.add(file.getName());
+        }
         for (File file : files2) {
-            if (names1.contains(file.getName())) result.add(file.getName());
+            if (names1.contains(file.getName())) {
+                result.add(file.getName());
+            }
         }
         String[] arr = new String[result.size()];
-        for (int i = 0; i < result.size(); i++) arr[i] = result.get(i);
+        for (int i = 0; i < result.size(); i++) {
+            arr[i] = result.get(i);
+        }
         return arr;
     }
 

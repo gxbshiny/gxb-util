@@ -20,7 +20,7 @@ import java.util.Map;
 /**
  * @Author: gxb
  * @Time: 2020/3/31 17:43
- * @Description:
+ * @Description: http工具
  */
 public final class HttpUtil {
 

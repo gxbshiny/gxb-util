@@ -21,18 +21,11 @@ public final class TcpUtil {
      * @param host  目标主机
      * @param port  目标主机的tcp端口
      * @param bytes 需要发送的数据
-     * @throws IOException
+     * @throws IOException IO异常
      */
     public static void send(String host, int port, byte[] bytes) throws IOException {
-        Socket socket = null;
-        BufferedOutputStream bos = null;
-        try {
-            socket = new Socket(host, port);
-            bos = new BufferedOutputStream(socket.getOutputStream());
+        try (Socket socket = new Socket(host, port); BufferedOutputStream bos = new BufferedOutputStream(socket.getOutputStream())) {
             bos.write(bytes);
-        } finally {
-            if (bos != null) bos.close();
-            if (socket != null) socket.close();
         }
     }
 

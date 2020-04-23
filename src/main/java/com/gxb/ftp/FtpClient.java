@@ -13,7 +13,7 @@ import java.io.IOException;
 /**
  * @Author: gxb
  * @Time: 2019/12/2 10:43
- * @Description:
+ * @Description: ftp客户端
  */
 public class FtpClient {
     private static final Logger log = LoggerFactory.getLogger(FtpClient.class);
@@ -27,9 +27,12 @@ public class FtpClient {
     private int fileType;
 
     public FtpClient() {
-        this.port = 0; // 若小于等于0则连接默认端口
-        this.encoding = "UTF-8"; // 默认为UTF-8
-        this.fileType = FTPClient.BINARY_FILE_TYPE; // 默认为二进制文件
+        // 若小于等于0则连接默认端口
+        this.port = 0;
+        // 默认为UTF-8
+        this.encoding = "UTF-8";
+        // 默认为二进制文件
+        this.fileType = FTPClient.BINARY_FILE_TYPE;
         this.client = new FTPClient();
     }
 
@@ -58,11 +61,19 @@ public class FtpClient {
         this.fileType = fileType;
     }
 
+    /**
+     * 登录
+     *
+     * @return 登陆成功或失败
+     */
     public boolean login() {
         try {
             client.setControlEncoding(encoding);
-            if (port <= 0) client.connect(host);
-            else client.connect(host, port);
+            if (port <= 0) {
+                client.connect(host);
+            } else {
+                client.connect(host, port);
+            }
             client.login(username, password);
             client.setFileType(fileType);
             client.enterLocalPassiveMode();
@@ -81,10 +92,22 @@ public class FtpClient {
         return true;
     }
 
+    /**
+     * 切换目录
+     *
+     * @param dir 目录
+     * @return 切换成功或失败
+     * @throws IOException 异常
+     */
     public boolean changeWorkingDirectory(String dir) throws IOException {
         return client.changeWorkingDirectory(dir);
     }
 
+    /**
+     * 退出登录
+     *
+     * @return 成功或失败
+     */
     public boolean logout() {
         try {
             client.logout();
@@ -105,6 +128,12 @@ public class FtpClient {
         return true;
     }
 
+    /**
+     * 列出指定路径下的文件列表
+     *
+     * @param path 指定的路径
+     * @return 文件数组
+     */
     public String[] fileNameList(String path) {
         String[] names = null;
         try {
@@ -115,6 +144,13 @@ public class FtpClient {
         return names;
     }
 
+    /**
+     * 下载文件
+     *
+     * @param remoteFile 远程文件
+     * @param localFile  文件保存的位置
+     * @return 下载成功或失败
+     */
     public boolean downFile(String remoteFile, String localFile) {
         FileOutputStream fos = null;
         try {
@@ -135,6 +171,13 @@ public class FtpClient {
         return true;
     }
 
+    /**
+     * 上传文件
+     *
+     * @param localFile  本地文件
+     * @param remotePath 远程目录
+     * @return 上传成功或失败
+     */
     public boolean uploadFile(File localFile, String remotePath) {
         FileInputStream fis = null;
         try {

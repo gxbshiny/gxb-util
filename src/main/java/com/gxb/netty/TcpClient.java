@@ -25,7 +25,6 @@ public class TcpClient {
     protected int localPort;
     protected Channel channel;
     protected ChannelInitializer<SocketChannel> initializer;
-    private EventLoopGroup group;
     private Bootstrap boot;
     private int seconds;
     private boolean reconnect;
@@ -64,7 +63,7 @@ public class TcpClient {
         if (name == null) {
             name = "TCP-Client-" + host + ":" + port;
         }
-        group = new NioEventLoopGroup();
+        EventLoopGroup group = new NioEventLoopGroup();
         boot = new Bootstrap();
         boot.group(group).channel(NioSocketChannel.class).option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT).handler(initializer).bind(localPort);
         connect();
@@ -87,7 +86,7 @@ public class TcpClient {
                 seconds++;
                 log.error(String.format("TCP客户端[%s]:连接服务器%s:%d失败 %d秒后重连...", name, host, port, seconds * 10));
                 if (reconnect) {
-                    cf.channel().eventLoop().schedule(() -> connect(), seconds * 10, TimeUnit.SECONDS);
+                    cf.channel().eventLoop().schedule(this::connect, seconds * 10, TimeUnit.SECONDS);
                 }
             }
         });

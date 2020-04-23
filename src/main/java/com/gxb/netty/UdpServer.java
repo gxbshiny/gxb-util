@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @Author: gxb
  * @Date: 2019/11/18 14:43
- * @Description:
+ * @Description: UDP服务端
  */
 public class UdpServer {
     private static final Logger log = LoggerFactory.getLogger(UdpServer.class);
@@ -47,6 +47,11 @@ public class UdpServer {
         this.handler = handler;
     }
 
+    /**
+     * 启动UDP服务端
+     *
+     * @throws InterruptedException 启动异常
+     */
     public void start() throws InterruptedException {
         if (name == null) {
             name = "UDP-Server-" + ":" + port;

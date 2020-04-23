@@ -23,9 +23,6 @@ public class TcpServer {
     protected String name;
     protected int port;
     protected ChannelInitializer<SocketChannel> initializer;
-    private EventLoopGroup bossGroup;
-    private EventLoopGroup workGroup;
-    private ServerBootstrap boot;
 
     public TcpServer() {
 
@@ -49,13 +46,18 @@ public class TcpServer {
         this.initializer = initializer;
     }
 
+    /**
+     * 启动TCP服务端
+     *
+     * @throws InterruptedException 启动异常
+     */
     public void start() throws InterruptedException {
         if (name == null) {
             name = "TCP-Server-" + port;
         }
-        bossGroup = new NioEventLoopGroup(1);
-        workGroup = new NioEventLoopGroup();
-        boot = new ServerBootstrap();
+        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+        EventLoopGroup workGroup = new NioEventLoopGroup();
+        ServerBootstrap boot = new ServerBootstrap();
         boot.group(bossGroup, workGroup).channel(NioServerSocketChannel.class).childOption(ChannelOption.ALLOCATOR,
                 PooledByteBufAllocator.DEFAULT).childHandler(initializer);
         ChannelFuture future = boot.bind(port).sync();

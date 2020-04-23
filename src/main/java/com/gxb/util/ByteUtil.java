@@ -5,7 +5,7 @@ import java.io.ByteArrayOutputStream;
 /**
  * @Author: gxb
  * @Date: 2019/11/16 16:46
- * @Description:
+ * @Description: 字节工具
  */
 public final class ByteUtil {
 
@@ -48,7 +48,9 @@ public final class ByteUtil {
      * @return BCD字节码
      */
     public static byte[] stringToBcd(String s) {
-        if ((s.length() & 1) == 1) s = "0" + s;
+        if ((s.length() & 1) == 1) {
+            s = "0" + s;
+        }
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         char[] cs = s.toCharArray();
         for (int i = 0; i < cs.length; i += 2) {
@@ -237,7 +239,9 @@ public final class ByteUtil {
      * @return byte[]
      */
     public static byte[] hexToBytes(String hex) {
-        if ((hex.length() & 1) == 1) hex = "0" + hex;
+        if ((hex.length() & 1) == 1) {
+            hex = "0" + hex;
+        }
         byte[] ret = new byte[hex.length() / 2];
         for (int i = 0; i < ret.length; i++) {
             ret[i] = (byte) ((Byte.decode("0x" + hex.charAt(i * 2)) << 4) ^ (Byte.decode("0x" + hex.charAt(i * 2 + 1))));
@@ -291,12 +295,20 @@ public final class ByteUtil {
      * @return true相同 false不同
      */
     public static boolean compareBytes(byte[] bytes1, byte[] bytes2) {
-        if (bytes1 == null || bytes2 == null) return false;
-        if (bytes1 == bytes2) return true;
+        if (bytes1 == null || bytes2 == null) {
+            return false;
+        }
+        if (bytes1 == bytes2) {
+            return true;
+        }
         int length = bytes1.length;
-        if (length != bytes2.length) return false;
+        if (length != bytes2.length) {
+            return false;
+        }
         for (int i = 0; i < length; i++) {
-            if (bytes1[i] != bytes2[i]) return false;
+            if (bytes1[i] != bytes2[i]) {
+                return false;
+            }
         }
         return true;
     }
@@ -309,10 +321,14 @@ public final class ByteUtil {
      * @return 第一个元素的下标位置 或者-1
      */
     public static int containBytes(byte[] longBytes, byte[] shortBytes) {
-        if (longBytes == null || shortBytes == null) return -1;
+        if (longBytes == null || shortBytes == null) {
+            return -1;
+        }
         int longLength = longBytes.length;
         int shortLength = shortBytes.length;
-        if (longLength < shortLength) return -1;
+        if (longLength < shortLength) {
+            return -1;
+        }
         outer:
         for (int i = 0; i < longLength - shortLength + 1; i++) {
             for (int j = 0; j < shortLength; j++) {
@@ -339,13 +355,18 @@ public final class ByteUtil {
         byte[] bytes = new byte[al + bl];
         int i = 0, j = 0, t = 0;
         while (i < al && j < bl) {
-            if (a[i] < b[j])
+            if (a[i] < b[j]) {
                 bytes[t++] = asc ? a[i++] : b[j++];
-            else
+            } else {
                 bytes[t++] = asc ? b[j++] : a[i++];
+            }
         }
-        while (i < al) bytes[t++] = a[i++];
-        while (j < bl) bytes[t++] = b[j++];
+        while (i < al) {
+            bytes[t++] = a[i++];
+        }
+        while (j < bl) {
+            bytes[t++] = b[j++];
+        }
         return bytes;
     }
 

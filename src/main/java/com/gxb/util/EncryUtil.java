@@ -10,6 +10,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -66,7 +67,7 @@ public final class EncryUtil {
 
     // base64编码
     public static String encodeBase64(String content) {
-        return encodeBase64(content.getBytes(Const.UTF_8));
+        return encodeBase64(content.getBytes(StandardCharsets.UTF_8));
     }
 
     public static String encodeBase64(byte[] bytes) {
@@ -74,8 +75,8 @@ public final class EncryUtil {
     }
 
     // base64解码
-    public static String decodeBase64(String content) {
-        return new String(decodeBase64(content.getBytes()), Const.UTF_8);
+    public static byte[] decodeBase64(String content) {
+        return decodeBase64(content.getBytes());
     }
 
     public static byte[] decodeBase64(byte[] bytes) {
@@ -95,7 +96,7 @@ public final class EncryUtil {
     }
 
     public static String encryAES(String content, String secretKey) throws Exception {
-        return ByteUtil.bytesToHex(entryByteAES(content.getBytes(Const.UTF_8), secretKey));
+        return ByteUtil.bytesToHex(entryByteAES(content.getBytes(StandardCharsets.UTF_8), secretKey));
     }
 
     public static String decryAES(String content, String secretKey) throws Exception {
@@ -104,7 +105,7 @@ public final class EncryUtil {
 
     private static Key getAESKey(String secretKey) throws NoSuchAlgorithmException {
         SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
-        secureRandom.setSeed(secretKey.getBytes(Const.UTF_8));
+        secureRandom.setSeed(secretKey.getBytes(StandardCharsets.UTF_8));
         KeyGenerator kgen = KeyGenerator.getInstance("AES");
         kgen.init(128, secureRandom);
         return new SecretKeySpec(kgen.generateKey().getEncoded(), "AES");
@@ -116,11 +117,11 @@ public final class EncryUtil {
         GZIPOutputStream gzip = null;
         try {
             gzip = new GZIPOutputStream(out);
-            gzip.write(content.getBytes(Const.UTF_8));
+            gzip.write(content.getBytes(StandardCharsets.UTF_8));
         } finally {
             if (gzip != null) gzip.close();
         }
-        return Base64.getEncoder().encodeToString(out.toByteArray());
+        return encodeBase64(out.toByteArray());
     }
 
     public static String unGzip(String gzipString) throws IOException {
@@ -166,7 +167,7 @@ public final class EncryUtil {
         Key key = SecretKeyFactory.getInstance("desede").generateSecret(new DESedeKeySpec(secretKey.getBytes()));
         Cipher cipher = Cipher.getInstance("desede/CBC/PKCS5Padding");
         cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec("01234567".getBytes()));
-        return Base64.getEncoder().encodeToString(cipher.doFinal(content.getBytes(Const.UTF_8)));
+        return encodeBase64(cipher.doFinal(content.getBytes(StandardCharsets.UTF_8)));
     }
 
     public static String decode3DES(String content, String secretKey) throws Exception {
@@ -174,7 +175,7 @@ public final class EncryUtil {
         Key key = SecretKeyFactory.getInstance("desede").generateSecret(new DESedeKeySpec(secretKey.getBytes()));
         Cipher cipher = Cipher.getInstance("desede/CBC/PKCS5Padding");
         cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec("01234567".getBytes()));
-        return new String(cipher.doFinal(Base64.getDecoder().decode(content)), Const.UTF_8);
+        return new String(cipher.doFinal(decodeBase64(content)), StandardCharsets.UTF_8);
     }
 
 }

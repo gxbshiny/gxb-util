@@ -12,6 +12,7 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -96,7 +97,7 @@ public final class HttpUtil {
     public static UrlEncodedFormEntity getFormEntity(Map<String, String> params) {
         List<NameValuePair> form = new ArrayList<>(params.size());
         params.forEach((k, v) -> form.add(new BasicNameValuePair(k, v)));
-        return new UrlEncodedFormEntity(form, Const.UTF_8);
+        return new UrlEncodedFormEntity(form, StandardCharsets.UTF_8);
     }
 
     /**

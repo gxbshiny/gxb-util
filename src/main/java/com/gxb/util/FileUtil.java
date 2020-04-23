@@ -18,6 +18,20 @@ public final class FileUtil {
 
     }
 
+    public static void main(String[] args) throws IOException {
+        String path1 = "E:\\QQ-File\\851341116\\FileRecv\\16X16";
+        File[] files1 = getFileList(path1);
+        for (File file : files1) {
+            String name = file.getName().split("\\.")[0];
+            rename(file, name + "-extSmall.png");
+        }
+    }
+
+    public static boolean rename(File file, String name) {
+        return file.renameTo(new File(file.getParent(), name));
+    }
+
+
     /**
      * 获取目标文件夹下的所有文件
      *

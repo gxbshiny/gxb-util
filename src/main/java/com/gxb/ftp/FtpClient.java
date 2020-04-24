@@ -119,8 +119,7 @@ public class FtpClient {
                 try {
                     client.disconnect();
                 } catch (IOException e) {
-                    log.error("FTP断开连接异常...", e.getMessage());
-                    return false;
+                    log.error("FTP断开连接异常:" + e.getMessage());
                 }
             }
         }

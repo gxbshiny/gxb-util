@@ -5,6 +5,8 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 /**
@@ -77,7 +79,7 @@ public final class FileUtil {
     public static void collectionToFile(Collection<String> collection, File file) throws IOException {
         BufferedWriter bw = null;
         try {
-            bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), Const.UTF_8));
+            bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
             Iterator<String> its = collection.iterator();
             while (its.hasNext()) {
                 bw.write(its.next());
@@ -101,7 +103,7 @@ public final class FileUtil {
     public static void fileToCollection(File file, Collection<String> collection) throws IOException {
         BufferedReader br = null;
         try {
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(file), Const.UTF_8));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
             String temp;
             while ((temp = br.readLine()) != null) {
                 collection.add(temp);
@@ -124,7 +126,7 @@ public final class FileUtil {
     public static void mapToFile(Map<String, String> map, File file, String split) throws IOException {
         BufferedWriter bw = null;
         try {
-            bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), Const.UTF_8));
+            bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
             Iterator<Map.Entry<String, String>> its = map.entrySet().iterator();
             while (its.hasNext()) {
                 Map.Entry<String, String> entry = its.next();

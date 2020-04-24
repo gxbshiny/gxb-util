@@ -1,10 +1,7 @@
 package com.gxb.util;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-
 import java.text.DecimalFormat;
+import java.util.regex.Pattern;
 
 /**
  * @Author: gxb
@@ -12,6 +9,10 @@ import java.text.DecimalFormat;
  * @Description: 我的工具
  */
 public final class MyUtil {
+
+    public static final Pattern NUMERIC = Pattern.compile("[0-9]*");
+    public static final Pattern IPV4 = Pattern.compile("^(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])\\.(\\d{1," +
+            "2}|1\\d\\d|2[0-4]\\d|25[0-5])\\.(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])\\.(\\d{1,2}|1\\d\\d|2[0-4]\\d|25[0-5])$");
 
     private MyUtil() {
 
@@ -24,7 +25,7 @@ public final class MyUtil {
      * @return true 是  false 不是
      */
     public static boolean isNumeric(String s) {
-        return Const.PATTERN_NUM.matcher(s).matches();
+        return NUMERIC.matcher(s).matches();
     }
 
     /**
@@ -34,7 +35,7 @@ public final class MyUtil {
      * @return true 是  false 不是
      */
     public static boolean isIPv4(String s) {
-        return Const.PATTERN_IPV4.matcher(s).matches();
+        return IPV4.matcher(s).matches();
     }
 
     /**

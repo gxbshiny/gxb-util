@@ -130,31 +130,6 @@ public final class MyUtil {
         return "正北";
     }
 
-    public static String jsonToXml(String json) {
-        StringBuilder builder = new StringBuilder();
-        Object jo = JSON.parse(json);
-        if (jo instanceof JSONObject) {
-            ((JSONObject) jo).forEach((key, val) -> {
-                if (val instanceof JSONObject || val instanceof JSONArray) {
-                    builder.append("<").append(key).append(">\n");
-                    builder.append(jsonToXml(((JSON) val).toJSONString()));
-                } else {
-                    builder.append("<").append(key).append(">");
-                    builder.append(val);
-                }
-                builder.append("</").append(key).append(">\n");
-            });
-        } else if (jo instanceof JSONArray) {
-            ((JSONArray) jo).forEach(obj -> {
-                if (obj instanceof JSONObject || obj instanceof JSONArray) {
-                    builder.append("<a>\n").append(jsonToXml(((JSON) obj).toJSONString())).append("</a>\n");
-                } else {
-                    builder.append("<a>").append(obj).append("</a>\n");
-                }
-            });
-        }
-        return builder.toString();
-    }
 
 }
 

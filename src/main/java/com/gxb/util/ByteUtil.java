@@ -22,7 +22,7 @@ public final class ByteUtil {
      * @return 字符串
      */
     public static String bcdToString(byte[] bytes, int from, int to) {
-        StringBuilder temp = new StringBuilder((to - from) * 2);
+        StringBuilder temp = new StringBuilder();
         while (from < to) {
             temp.append((bytes[from] & 0xf0) >>> 4);
             temp.append(bytes[from] & 0x0f);

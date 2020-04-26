@@ -126,7 +126,8 @@ public final class FileUtil {
     public static void mapToFile(Map<String, String> map, File file, String split) throws IOException {
         BufferedWriter bw = null;
         try {
-            bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
+            bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8
+            ));
             Iterator<Map.Entry<String, String>> its = map.entrySet().iterator();
             while (its.hasNext()) {
                 Map.Entry<String, String> entry = its.next();

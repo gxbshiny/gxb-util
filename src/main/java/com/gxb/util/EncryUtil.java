@@ -3,6 +3,7 @@ package com.gxb.util;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.DESedeKeySpec;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -30,11 +31,17 @@ public final class EncryUtil {
 
     }
 
-    // MD5加密
-    public static String encryMD5(String s, Charset cs) throws NoSuchAlgorithmException {
+    /**
+     * MD5加密
+     *
+     * @param s 要加密的字符串
+     * @return 密文
+     * @throws NoSuchAlgorithmException 无该算法异常
+     */
+    public static String encryMD5(String s) throws NoSuchAlgorithmException {
         StringBuilder builder = new StringBuilder();
-        MessageDigest digest = MessageDigest.getInstance("MD5");
-        byte[] bytes = digest.digest(s.getBytes(cs));
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        byte[] bytes = md.digest(s.getBytes());
         for (byte b : bytes) {
             int num = b & 0xFF;
             String hex = Integer.toHexString(num);
@@ -46,17 +53,24 @@ public final class EncryUtil {
         return builder.toString();
     }
 
-    // MD5加密
-    public static String encryMD5(String s) throws NoSuchAlgorithmException {
-        return encryMD5(s, Charset.defaultCharset());
-    }
-
-    // 异或校验
+    /**
+     * 异或校验
+     *
+     * @param bytes 要校验的byte[]
+     * @return 校验结果
+     */
     public static byte xor(byte[] bytes) {
         return xor(bytes, 0, bytes.length);
     }
 
-    // 异或校验
+    /**
+     * 异或校验
+     *
+     * @param bytes 要校验的byte[]
+     * @param from  起始位
+     * @param to    结束位（不包含）
+     * @return 校验结果
+     */
     public static byte xor(byte[] bytes, int from, int to) {
         byte check = to - from > 1 ? (byte) (bytes[from] ^ bytes[from + 1]) : 0x00;
         for (int i = from + 2; i < to; i++) {
@@ -65,45 +79,67 @@ public final class EncryUtil {
         return check;
     }
 
-    // base64编码
+    /**
+     * 将字符串进行base64编码
+     *
+     * @param content 要编码的内容
+     * @return base64编码
+     */
     public static String encodeBase64(String content) {
         return encodeBase64(content.getBytes(StandardCharsets.UTF_8));
     }
 
+    /**
+     * 将byte[]进行base64编码
+     *
+     * @param bytes 要编码的byte[]
+     * @return base64编码
+     */
     public static String encodeBase64(byte[] bytes) {
         return Base64.getEncoder().encodeToString(bytes);
     }
 
-    // base64解码
+    /**
+     * 进行base64解码
+     *
+     * @param content 经过base64编码的内容
+     * @return base64解码后的原内容
+     */
     public static byte[] decodeBase64(String content) {
         return decodeBase64(content.getBytes());
     }
 
+    /**
+     * 进行base64解码
+     *
+     * @param bytes 经过base64编码的内容
+     * @return base64解码后的原内容
+     */
     public static byte[] decodeBase64(byte[] bytes) {
         return Base64.getDecoder().decode(bytes);
     }
 
-    public static byte[] entryByteAES(byte[] content, String secretKey) throws Exception {
+    public static byte[] entryByteAes(byte[] content, String secretKey) throws Exception {
         Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-        cipher.init(Cipher.ENCRYPT_MODE, getAESKey(secretKey));
+        cipher.init(Cipher.ENCRYPT_MODE, getAesKey(secretKey));
         return cipher.doFinal(content);
     }
 
-    public static byte[] decryByteAES(byte[] content, String secretKey) throws Exception {
+    public static byte[] decryByteAes(byte[] content, String secretKey) throws Exception {
         Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
-        cipher.init(Cipher.DECRYPT_MODE, getAESKey(secretKey));
+        cipher.init(Cipher.DECRYPT_MODE, getAesKey(secretKey));
         return cipher.doFinal(content);
     }
 
-    public static String encryAES(String content, String secretKey) throws Exception {
-        return ByteUtil.bytesToHex(entryByteAES(content.getBytes(StandardCharsets.UTF_8), secretKey));
+    public static String encryAes(String content, String secretKey) throws Exception {
+        return ByteUtil.bytesToHex(entryByteAes(content.getBytes(StandardCharsets.UTF_8), secretKey));
     }
 
-    public static String decryAES(String content, String secretKey) throws Exception {
-        return new String(decryByteAES(ByteUtil.hexToBytes(content), secretKey));
+    public static String decryAes(String content, String secretKey) throws Exception {
+        return new String(decryByteAes(ByteUtil.hexToBytes(content), secretKey));
     }
 
-    private static Key getAESKey(String secretKey) throws NoSuchAlgorithmException {
+    private static Key getAesKey(String secretKey) throws NoSuchAlgorithmException {
         SecureRandom secureRandom = SecureRandom.getInstance("SHA1PRNG");
         secureRandom.setSeed(secretKey.getBytes(StandardCharsets.UTF_8));
         KeyGenerator kgen = KeyGenerator.getInstance("AES");
@@ -161,35 +197,47 @@ public final class EncryUtil {
         return docompressed;
     }
 
-    public static byte[] encryByteSHA1(byte[] content) throws NoSuchAlgorithmException {
+    public static byte[] encryByteSha1(byte[] content) throws NoSuchAlgorithmException {
         MessageDigest digest = MessageDigest.getInstance("SHA-1");
         digest.update(content);
         return digest.digest();
     }
 
-    public static String encrySHA1(String content) throws NoSuchAlgorithmException {
-        return ByteUtil.bytesToHex(encryByteSHA1(content.getBytes()));
+    public static String encrySha1(String content) throws NoSuchAlgorithmException {
+        return ByteUtil.bytesToHex(encryByteSha1(content.getBytes()));
     }
 
-    public static String encrySHA1(String content, Charset charset) throws NoSuchAlgorithmException {
-        return ByteUtil.bytesToHex(encryByteSHA1(content.getBytes(charset)));
+    public static String encrySha1(String content, Charset charset) throws NoSuchAlgorithmException {
+        return ByteUtil.bytesToHex(encryByteSha1(content.getBytes(charset)));
     }
 
-    public static String encode3Des(String content, String secretKey) throws Exception {
+    public static String encry3DesCbcP5(String content, String secretKey) throws Exception {
         Key key = SecretKeyFactory.getInstance("desede").generateSecret(new DESedeKeySpec(secretKey.getBytes()));
         Cipher cipher = Cipher.getInstance("desede/CBC/PKCS5Padding");
         cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec("01234567".getBytes()));
         return encodeBase64(cipher.doFinal(content.getBytes(StandardCharsets.UTF_8)));
     }
 
-    public static String decode3Des(String content, String secretKey) throws Exception {
-        if (content == null || content.length() == 0) {
-            return "";
-        }
+    public static String decry3DesCbcP5(String content, String secretKey) throws Exception {
         Key key = SecretKeyFactory.getInstance("desede").generateSecret(new DESedeKeySpec(secretKey.getBytes()));
         Cipher cipher = Cipher.getInstance("desede/CBC/PKCS5Padding");
         cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec("01234567".getBytes()));
         return new String(cipher.doFinal(decodeBase64(content)), StandardCharsets.UTF_8);
     }
+
+    public static String encryDesCbcP5(String content, String secretKey) throws Exception {
+        Key key = SecretKeyFactory.getInstance("DES").generateSecret(new DESKeySpec(secretKey.getBytes()));
+        Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
+        cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec("12345678".getBytes()));
+        return encodeBase64(cipher.doFinal(content.getBytes(StandardCharsets.UTF_8)));
+    }
+
+    public static String decryDesCbcP5(String content, String secretKey) throws Exception {
+        Key key = SecretKeyFactory.getInstance("DES").generateSecret(new DESKeySpec(secretKey.getBytes()));
+        Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
+        cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec("12345678".getBytes()));
+        return encodeBase64(cipher.doFinal(content.getBytes(StandardCharsets.UTF_8)));
+    }
+
 
 }
